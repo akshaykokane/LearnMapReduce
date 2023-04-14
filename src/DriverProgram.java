@@ -24,6 +24,9 @@ public class DriverProgram extends Configured implements Tool {
 		Job job = Job.getInstance(conf);
 		job.setJobName("viewCount");
 		job.setJarByClass(DriverProgram.class);
+	
+		// set num of reducer to 2
+		job.setNumReduceTasks(2);
 		
 		// set output key and value data type
 		job.setOutputKeyClass(Text.class);
@@ -32,6 +35,11 @@ public class DriverProgram extends Configured implements Tool {
 		//set mapper and reduce class references
 		job.setMapperClass(Map.class);
 		job.setReducerClass(Reduce.class);
+		
+		// set combiner class, to run for each mapper
+		// does some job of reducer at mapper level
+		// improves parallelism
+		job.setCombinerClass(Reduce.class);
 		
 		//set inputFilepath and output file path
 		Path inputFilePath = new Path(arg0[0]);
